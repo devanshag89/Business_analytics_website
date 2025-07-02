@@ -1,38 +1,86 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { jwtDecode } from 'jwt-decode';
 
 const AuthContext = createContext();
 
-
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('user')) || null);
-  const [token, setToken] = useState(() => localStorage.getItem('token') || null);
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (user && token) {
-      localStorage.setItem('user', JSON.stringify(user));
-      localStorage.setItem('token', token);
-    } else {
-      localStorage.removeItem('user');
-      localStorage.removeItem('token');
-    }
-  }, [user, token]);
+    const initAuth = () => {
+      try {
+        const storedToken = localStorage.getItem('token');
+        const storedUser = localStorage.getItem('user');
 
-  const login = (userData, jwtToken) => {
+        if (storedToken && storedUser) {
+          if (isTokenValid(storedToken)) {
+            setToken(storedToken);
+            setUser(JSON.parse(storedUser));
+          } else {
+            clearAuth();
+          }
+        }
+      } catch (error) {
+        console.error('Auth initialization error:', error);
+        clearAuth();
+      } finally {
+        setIsLoading(false); 
+      }
+    };
+
+    initAuth();
+  }, []); 
+
+  const isTokenValid = (token) => {
+    if (!token) return false;
+    try {
+      const decoded = jwtDecode(token);
+      return decoded.exp * 1000 > Date.now();
+    } catch {
+      return false;
+    }
+  };
+
+  const clearAuth = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setToken(null);
+    setUser(null);
+  };
+
+  const login = (userData, authToken) => {
+    localStorage.setItem('token', authToken);
+    localStorage.setItem('user', JSON.stringify(userData));
+    setToken(authToken);
     setUser(userData);
-    setToken(jwtToken);
   };
 
   const logout = () => {
-    setUser(null);
-    setToken(null);
+    clearAuth();
+  };
+
+  const value = {
+    user,
+    token,
+    isLoading,
+    isAuthenticated: !!user && isTokenValid(token),
+    login,
+    logout,
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
-      {children}
+    <AuthContext.Provider value={value}>
+      {!isLoading && children}
     </AuthContext.Provider>
   );
 };
 
-// 3. Custom hook for consuming the context
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
