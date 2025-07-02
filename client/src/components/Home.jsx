@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { BarChart3, TrendingUp, Users, Target, ChevronRight, PlayCircle, Star, ArrowRight } from 'lucide-react';
+import {Link} from 'react-router-dom';
 
 const Home = ({ scrollToSection }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -63,10 +64,10 @@ const Home = ({ scrollToSection }) => {
               </div>
               
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-4 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 transform hover:scale-105 shadow-xl hover:shadow-2xl flex items-center justify-center font-semibold">
+                <Link to='/login' className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-4 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 transform hover:scale-105 shadow-xl hover:shadow-2xl flex items-center justify-center font-semibold">
                   Get Started Free
                   <ArrowRight className="w-5 h-5 ml-2" />
-                </button>
+                </Link>
                 <button className="border-2 border-slate-300 text-slate-700 px-8 py-4 rounded-xl hover:border-blue-300 hover:text-blue-600 transition-all duration-200 flex items-center justify-center font-semibold">
                   <PlayCircle className="w-5 h-5 mr-2" />
                   Watch Demo
@@ -175,9 +176,9 @@ const Home = ({ scrollToSection }) => {
                 Join thousands of companies already using DataVision to drive growth and make smarter decisions.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-blue-50 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                <Link to='/login' className="bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-blue-50 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl">
                   Start Your Free Trial
-                </button>
+                </Link>
                 <button 
                   onClick={() => scrollToSection('contact')}
                   className="border-2 border-white text-white px-8 py-4 rounded-xl hover:bg-white hover:text-blue-600 transition-all duration-200 transform hover:scale-105 font-semibold"

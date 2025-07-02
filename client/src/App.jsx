@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import MainPage from './components/MainPage'
 import Login from './auth/Login'
 import Signup from './auth/Signup'
-import Dashbord from './dashboard/Dashbord'
+import Dashboard from './dashboard/Dashbord'
 import ProtectedRoute from './contexts/ProtectedRoutes'
 
 
@@ -17,7 +17,7 @@ function App() {
         <Route path='/login' element={<Login/>}/>
         <Route path='/signup' element={<Signup/>}/>
         <Route element={<ProtectedRoute />}>
-          <Route path="/dashboard" element={<Dashbord />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           {/* Add more protected routes here */}
         </Route>
       </Routes>

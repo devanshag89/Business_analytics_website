@@ -1,12 +1,10 @@
 import { useState } from 'react';
-import { BarChart3, Eye, EyeOff, Mail, Lock, ArrowRight, Github, Chrome, Apple } from 'lucide-react';
+import { BarChart3, Eye, EyeOff, Mail, Lock, ArrowRight } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/authContext';
 
-// Login Component
 const Login = () => {
-
-  const {login} = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -15,7 +13,6 @@ const Login = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
 
   const handleInputChange = (e) => {
     setFormData({
@@ -25,45 +22,44 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setIsLoading(true);
+    e.preventDefault();
+    setIsLoading(true);
 
-  try {
-    const response = await fetch('http://localhost:5000/api/auth/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: formData.email,
-        password: formData.password,
-      }),
-    });
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (!response.ok) {
-      throw new Error(data.message || 'Login failed');
+      if (!response.ok) {
+        throw new Error(data.message || 'Login failed');
+      }
+      console.log(data.user);
+
+      login(data.user, data.token);
+      navigate('/dashboard');
+
+    } catch (error) {
+      console.error(error);
+      alert(`Error: ${error.message}`);
+    } finally {
+      setIsLoading(false);
     }
-    console.log(data.user);
-
-    login(data.user,data.token);
-
-    navigate('/dashboard');
-    
-  } catch (error) {
-    console.error(error);
-    alert(`Error: ${error.message}`);
-  } finally {
-    setIsLoading(false);
-  }
-};
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-rose-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-blue-50 to-blue-100 flex items-center justify-center p-4">
       <div className="max-w-md w-full">
         {/* Back Button */}
-        <Link 
+        <Link
           to="/"
           className="mb-6 text-slate-600 hover:text-slate-900 transition-colors duration-200 flex items-center"
         >
@@ -73,12 +69,12 @@ const Login = () => {
         {/* Login Card */}
         <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 p-8 relative overflow-hidden">
           {/* Decorative Elements */}
-          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full opacity-10 transform translate-x-16 -translate-y-8"></div>
-          <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-rose-400 to-orange-400 rounded-full opacity-10 transform -translate-x-8 translate-y-8"></div>
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-400 to-blue-400 rounded-full opacity-10 transform translate-x-16 -translate-y-8"></div>
+          <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-blue-400 to-indigo-400 rounded-full opacity-10 transform -translate-x-8 translate-y-8"></div>
 
           {/* Header */}
           <div className="text-center mb-8 relative z-10">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl mb-4 shadow-lg">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-indigo-600 to-blue-600 rounded-2xl mb-4 shadow-lg">
               <BarChart3 className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-3xl font-bold text-slate-900 mb-2">Welcome Back</h1>
@@ -96,7 +92,7 @@ const Login = () => {
                   value={formData.email}
                   onChange={handleInputChange}
                   required
-                  className="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 bg-white/50"
+                  className="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 bg-white/50"
                   placeholder="Enter your email"
                 />
               </div>
@@ -109,7 +105,7 @@ const Login = () => {
                   value={formData.password}
                   onChange={handleInputChange}
                   required
-                  className="w-full pl-12 pr-12 py-4 border border-slate-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 bg-white/50"
+                  className="w-full pl-12 pr-12 py-4 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 bg-white/50"
                   placeholder="Enter your password"
                 />
                 <button
@@ -125,7 +121,7 @@ const Login = () => {
             <button
               onClick={handleSubmit}
               disabled={isLoading}
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl font-semibold flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-gradient-to-r from-indigo-600 to-blue-600 text-white py-4 rounded-xl hover:from-indigo-700 hover:to-blue-700 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl font-semibold flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? (
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -142,8 +138,8 @@ const Login = () => {
           <div className="text-center mt-8 text-sm text-slate-600">
             Don't have an account?{' '}
             <Link
-              to='/signup'
-              className="text-purple-600 hover:text-purple-700 font-medium transition-colors duration-200"
+              to="/signup"
+              className="text-indigo-600 hover:text-indigo-700 font-medium transition-colors duration-200"
             >
               Create one now
             </Link>
@@ -154,4 +150,4 @@ const Login = () => {
   );
 };
 
-export default Login
+export default Login;

@@ -1,17 +1,25 @@
-import { useAuth } from '../contexts/authContext'
+import { useState } from 'react';
+import Sidebar from './Sidebar';
+import Navbar from './Navbar';
+import GenerateAnalysis from './GenerateAnalysis';
+import ViewReports from './ViewReports';
 
-function Dashbord() {
+const Dashboard = () => {
+  const [activeComponent, setActiveComponent] = useState('generate');
 
-  const { logout }  = useAuth();
-
-const {user} = useAuth();
   return (
-    <div>
-      <h1>{user.firstName}</h1>
-      <h1>Dashboard</h1>
-      <button onClick={logout}>Logout</button>
+    <div className="min-h-screen bg-slate-50">
+      <Sidebar activeComponent={activeComponent} setActiveComponent={setActiveComponent} />
+      <Navbar />
+      
+      <main className="ml-64 mt-10 pt-20 p-6 bg-slate-50 min-h-screen">
+        <div className="max-w-7xl mx-auto">
+          {activeComponent === 'generate' && <GenerateAnalysis />}
+          {activeComponent === 'reports' && <ViewReports />}
+        </div>
+      </main>
     </div>
-  )
-}
+  );
+};
 
-export default Dashbord
+export default Dashboard;
