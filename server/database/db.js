@@ -1,8 +1,10 @@
 const mongoose = require("mongoose");
 
+const MONGO_URI = process.env.MONGO_URI
+
 const db = async () => {
     try{
-        await mongoose.connect("mongodb://localhost:27017/DataVision");
+        await mongoose.connect(MONGO_URI);
         console.log("Mongo DB connected successfully");
     }
     catch(e){
@@ -10,4 +12,4 @@ const db = async () => {
     }
 }
 
-module.exports = db
+module.exports = {db}

@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Eye, EyeOff, Mail, Lock, User, Building, ArrowRight, Github, Chrome, Apple } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 const Signup = () => {
+
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -35,19 +37,52 @@ const Signup = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Client-side validation
     if (formData.password !== formData.confirmPassword) {
       alert('Passwords do not match!');
       return;
     }
-    
+
+    if (formData.password.length < 8) {
+      alert('Password must be at least 8 characters long!');
+      return;
+    }
+
     setIsLoading(true);
-    // Simulate signup process
-    setTimeout(() => {
+    
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          company: formData.company,
+          password: formData.password,
+          confirmPassword: formData.confirmPassword
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Signup failed');
+      }
+
+      navigate('/login');
+      
+    } catch (error) {
+      console.error('Signup error:', error);
+      alert(error.message || 'Signup failed. Please try again.');
+    } finally {
       setIsLoading(false);
-      alert('Account created successfully!');
-    }, 2000);
+    }
   };
 
   const getPasswordStrengthColor = () => {
