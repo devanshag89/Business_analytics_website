@@ -2,7 +2,7 @@ require("dotenv").config();
 const {db} = require("./database/db");
 const express = require("express");
 const cors = require("cors");
-const authRoutes = require("./routes/authRoutes")
+const path = require("path");
 
 const app = express();
 
@@ -15,6 +15,19 @@ app.use(cors({
 app.get('/test', (req, res) => {
     res.send("app is working");
 })
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+const authRoutes = require("./routes/authRoutes");
+const uploadRoutes = require('./routes/upload');
+const paymentRoutes = require('./routes/paymentRoutes');
+const insightsRoutes = require('./routes/insightRoutes');
+
+
+
+app.use('/api/upload', uploadRoutes);
+app.use('/api/payment', paymentRoutes);
+app.use('/api/insights', insightsRoutes);
 
 
 app.use('/api/auth',authRoutes);
