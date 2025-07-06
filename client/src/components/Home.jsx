@@ -65,7 +65,7 @@ const Home = ({ scrollToSection }) => {
               
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link to='/login' className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-4 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 transform hover:scale-105 shadow-xl hover:shadow-2xl flex items-center justify-center font-semibold">
-                  Get Started Free
+                  Get Started 
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Link>
                 <button className="border-2 border-slate-300 text-slate-700 px-8 py-4 rounded-xl hover:border-blue-300 hover:text-blue-600 transition-all duration-200 flex items-center justify-center font-semibold">
@@ -177,7 +177,7 @@ const Home = ({ scrollToSection }) => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link to='/login' className="bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-blue-50 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl">
-                  Start Your Free Trial
+                  Start Your Journey
                 </Link>
                 <button 
                   onClick={() => scrollToSection('contact')}

@@ -2,23 +2,34 @@ const axios = require('axios');
 
 async function getInsights(prompt) {
   const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`;
+  const maxRetries = 5;
+  const initialDelay = 1000;
+  const retryableStatusCodes = [503];
 
-  for (let i = 0; i < 5; i++) {
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
     try {
       const response = await axios.post(url, {
         contents: [{ parts: [{ text: prompt }] }]
+      }, {
+        timeout: 30000 
       });
 
       return response.data.candidates?.[0]?.content?.parts?.[0]?.text || "No insights generated.";
     } catch (err) {
-      if (err.response?.status === 503 && i < 2) {
-        console.warn(`Retrying Gemini API... attempt ${i + 1}`);
-        await new Promise(res => setTimeout(res, 1000 * (i + 1)));
-      } else {
+      const isRetryable = retryableStatusCodes.includes(err.response?.status) && attempt < 2;
+      
+      if (!isRetryable) {
         console.error("Gemini API Error:", err.response?.data || err.message);
         throw new Error("Failed to fetch insights from Gemini API");
       }
+
+      console.warn(`Retrying Gemini API... attempt ${attempt + 1}`);
+      const delay = initialDelay * (attempt + 1);
+      await new Promise(resolve => setTimeout(resolve, delay));
     }
   }
+
+  throw new Error("Max retries reached for Gemini API");
 }
+
 module.exports = getInsights;
