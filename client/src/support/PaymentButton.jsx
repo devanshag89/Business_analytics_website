@@ -21,6 +21,7 @@ const PaymentButton = ({ filename, setInsights, isGenerating, setIsGenerating, t
         order_id: data.id,
         
         handler: async function (response) {
+          try{
           const res = await axios.post(`${BASE_URL}/insights/generate`, {
             razorpay_payment_id: response.razorpay_payment_id,
             filename,
@@ -30,6 +31,12 @@ const PaymentButton = ({ filename, setInsights, isGenerating, setIsGenerating, t
           setInsights(res.data.insights);
           console.log(res.data.insightId)
           setIsGenerating(false);
+        }
+        catch(err){
+          console.log(err);
+          setIsGenerating(false);
+          alert("Error in generating insights");
+        }
         },
         
         modal: {

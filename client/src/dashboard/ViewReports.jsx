@@ -2,6 +2,7 @@ import { FileText, ArrowUpRight, Download, Eye, User, Calendar, Clock } from 'lu
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/authContext';
+import html2pdf from 'html2pdf.js';
 
 const ViewReports = () => {
   const [allInsights, setAllInsights] = useState([]);
@@ -57,61 +58,100 @@ const ViewReports = () => {
   };
 
   const downloadReportAsPDF = async (report) => {
-    try {
-      // Create a simple HTML content for PDF
-      const htmlContent = `
-        <!DOCTYPE html>
-        <html>
+  try {
+    const htmlContent = `
+      <html>
         <head>
-          <title>${report.title} - Report</title>
           <style>
-            body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
-            .header { border-bottom: 2px solid #14b8a6; padding-bottom: 10px; margin-bottom: 20px; }
-            .user-info { background: #f0fdfa; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
-            .insights { background: #ffffff; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px; }
-            h1 { color: #14b8a6; margin: 0; }
-            h2 { color: #374151; }
-            .meta { color: #6b7280; font-size: 14px; }
+            body {
+              font-family: 'Arial', sans-serif;
+              padding: 30px;
+              color: #1f2937;
+            }
+            .header {
+              border-bottom: 2px solid #14b8a6;
+              padding-bottom: 10px;
+              margin-bottom: 30px;
+            }
+            .header h1 {
+              color: #14b8a6;
+              margin-bottom: 5px;
+            }
+            .meta {
+              font-size: 14px;
+              color: #6b7280;
+            }
+            .section {
+              margin-bottom: 30px;
+              padding: 20px;
+              border-radius: 10px;
+              background-color: #f0fdfa;
+              border: 1px solid #ccfbf1;
+            }
+            .section h2 {
+              margin-bottom: 10px;
+              color: #0f766e;
+            }
+            .section p {
+              margin: 4px 0;
+              font-size: 14px;
+            }
+            .insights {
+              background: #ffffff;
+              border: 1px solid #e5e7eb;
+              border-radius: 8px;
+              padding: 20px;
+            }
+            pre {
+              white-space: pre-wrap;
+              font-size: 14px;
+              line-height: 1.6;
+              color: #374151;
+            }
           </style>
         </head>
         <body>
           <div class="header">
             <h1>${report.title}</h1>
             <div class="meta">
-              Generated on: ${formatDate(report.createdAt || report._id)} at ${formatTime(report.createdAt || report._id)}
+              Generated on ${formatDate(report.createdAt || report._id)} at ${formatTime(report.createdAt || report._id)}
             </div>
           </div>
-          
-          <div class="user-info">
+
+          <div class="section">
             <h2>User Information</h2>
             <p><strong>Name:</strong> ${user.firstName} ${user.lastName}</p>
             <p><strong>Email:</strong> ${user.email}</p>
             <p><strong>Company:</strong> ${user.company}</p>
             <p><strong>Report ID:</strong> ${report._id}</p>
           </div>
-          
-          <div class="insights">
+
+          <div class="section insights">
             <h2>Insights Report</h2>
-            <div style="white-space: pre-wrap;">${report.insightReport}</div>
+            <pre>${report.insightReport}</pre>
           </div>
         </body>
-        </html>
-      `;
+      </html>
+    `;
 
-      // Create a blob and download
-      const blob = new Blob([htmlContent], { type: 'text/html' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${report.title}_${formatDate(report.createdAt)}.html`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error('Error downloading report:', error);
-    }
-  };
+    const element = document.createElement('div');
+    element.innerHTML = htmlContent;
+
+    const filename = `${report.title}_${formatDate(report.createdAt)}.pdf`.replace(/\s+/g, '_');
+
+    html2pdf()
+      .from(element)
+      .set({
+        filename,
+        margin: 0.5,
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+      })
+      .save();
+  } catch (error) {
+    console.error('Error downloading PDF:', error);
+  }
+};
 
   const openFullReport = (report) => {
     setSelectedReport(report);

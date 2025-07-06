@@ -22,15 +22,15 @@ const authRoutes = require("./routes/authRoutes");
 const uploadRoutes = require('./routes/upload');
 const paymentRoutes = require('./routes/paymentRoutes');
 const insightsRoutes = require('./routes/insightRoutes');
-
+const messageRoutes = require('./routes/messageRoutes');
 
 
 app.use('/api/upload', uploadRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/insights', insightsRoutes);
-
-
 app.use('/api/auth',authRoutes);
+app.use('/api/newMessage',messageRoutes);
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT,() => {

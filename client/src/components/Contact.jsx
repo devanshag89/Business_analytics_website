@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { Mail, Phone, MapPin, Send, Clock, CheckCircle } from 'lucide-react';
-
+import axios from 'axios';
 
 const Contact = () => {
+
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -18,16 +20,19 @@ const Contact = () => {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    await axios.post(`${BASE_URL}/newMessage/save-message`, formData);
     setIsSubmitted(true);
-    // Reset form after 3 seconds
     setTimeout(() => {
       setIsSubmitted(false);
       setFormData({ name: '', email: '', company: '', message: '' });
     }, 3000);
-  };
-
+  } catch (error) {
+    console.error('Failed to send message:', error);
+  }
+};
   const contactInfo = [
     {
       icon: <Mail className="w-6 h-6" />,

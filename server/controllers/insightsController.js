@@ -3,6 +3,8 @@ const parseCSVtoTable = require('../utils/parseCSV');
 const InsightsModel = require('../models/InsightsSchema');
 const path = require('path');
 
+
+
 const generateInsights = async (req, res) => {
   try {
     const { razorpay_payment_id, filename, title, userId } = req.body;
@@ -23,6 +25,8 @@ const generateInsights = async (req, res) => {
       title: title,
       insightReport: insights
     });
+
+    
 
     res.json({ insights, insightId: InsightsSave._id });
   } catch (error) {
