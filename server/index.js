@@ -31,7 +31,7 @@ app.use('/api/insights', insightsRoutes);
 app.use('/api/auth',authRoutes);
 app.use('/api/newMessage',messageRoutes);
 
-app.post('/',(req,res)=>{
+app.get('/',(req,res)=>{
     res.send("api is working");
 })
 
