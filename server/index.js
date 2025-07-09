@@ -31,6 +31,10 @@ app.use('/api/insights', insightsRoutes);
 app.use('/api/auth',authRoutes);
 app.use('/api/newMessage',messageRoutes);
 
+app.post('/',(req,res)=>{
+    res.send("api is working");
+})
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT,() => {
