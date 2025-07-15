@@ -1,10 +1,8 @@
-import { BarChart3, FileText, LogOut } from 'lucide-react';
+import { BarChart3, FileText, LogOut, CreditCard } from 'lucide-react';
 import { useAuth } from '../contexts/authContext';
 
 const Sidebar = ({ activeComponent, setActiveComponent }) => {
-
   const {logout} = useAuth();
-
   const menuItems = [
     {
       id: 'generate',
@@ -17,6 +15,12 @@ const Sidebar = ({ activeComponent, setActiveComponent }) => {
       icon: FileText,
       label: 'View All Reports',
       description: 'Browse past reports'
+    },
+    {
+      id: 'transactions',
+      icon: CreditCard,
+      label: 'View Your Transactions',
+      description: 'Check transaction history'
     }
   ];
 
@@ -63,4 +67,4 @@ const Sidebar = ({ activeComponent, setActiveComponent }) => {
   );
 };
 
-export default Sidebar
+export default Sidebar;

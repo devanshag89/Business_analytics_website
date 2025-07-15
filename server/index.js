@@ -23,6 +23,7 @@ const uploadRoutes = require('./routes/upload');
 const paymentRoutes = require('./routes/paymentRoutes');
 const insightsRoutes = require('./routes/insightRoutes');
 const messageRoutes = require('./routes/messageRoutes');
+const transactionRoutes = require('./routes/transactionRoutes');
 
 
 app.use('/api/upload', uploadRoutes);
@@ -30,6 +31,7 @@ app.use('/api/payment', paymentRoutes);
 app.use('/api/insights', insightsRoutes);
 app.use('/api/auth',authRoutes);
 app.use('/api/newMessage',messageRoutes);
+app.use('/api/transactions',transactionRoutes);
 
 app.get('/',(req,res)=>{
     res.send("api is working");

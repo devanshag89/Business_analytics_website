@@ -2,7 +2,7 @@ const getInsights = require('../utils/geminiAPI');
 const parseCSVtoTable = require('../utils/parseCSV');
 const InsightsModel = require('../models/InsightsSchema');
 const path = require('path');
-
+const Transaction = require('../models/Transaction')
 
 
 const generateInsights = async (req, res) => {
@@ -26,7 +26,12 @@ const generateInsights = async (req, res) => {
       insightReport: insights
     });
 
-    
+    await Transaction.create({
+      userId,
+      title,
+      amount: 499,
+      referenceId: razorpay_payment_id,
+    });
 
     res.json({ insights, insightId: InsightsSave._id });
   } catch (error) {

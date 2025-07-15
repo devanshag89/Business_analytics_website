@@ -3,6 +3,7 @@ import Sidebar from './Sidebar';
 import Navbar from './Navbar';
 import GenerateAnalysis from './GenerateAnalysis';
 import ViewReports from './ViewReports';
+import ViewTransactions from './ViewTransactions';
 
 const Dashboard = () => {
   const [activeComponent, setActiveComponent] = useState('generate');
@@ -16,6 +17,7 @@ const Dashboard = () => {
         <div className="max-w-7xl mx-auto">
           {activeComponent === 'generate' && <GenerateAnalysis />}
           {activeComponent === 'reports' && <ViewReports />}
+          {activeComponent === 'transactions' && <ViewTransactions/>}
         </div>
       </main>
     </div>
